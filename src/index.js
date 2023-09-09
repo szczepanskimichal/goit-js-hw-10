@@ -1,45 +1,61 @@
 import { fetchBreeds } from './cat-api.js';
 import { fetchCatByBreed } from './cat-api.js';
+
 const loader = document.querySelector('.loader');
 const error = document.querySelector('.error');
 const select = document.querySelector('.breed-select');
 const catInfo = document.querySelector('.cat-info');
 let options = [];
 
-window.addEventListener('load', fetchBreeds);
+// Kiedy strona zostanie załadowana, wykonaj funkcję fetchBreeds
+window.addEventListener('load', () => {
+  // Pokaż animację ładowania
+  // loader.style.display = 'block';
+  loader.classList.remove('hidden');
+  // Ukryj select
+  select.style.display = 'none';
+  error.classList.add('hidden');
+  fetchBreeds()
+    .then(catsList => {
+      // Ukryj animację ładowania
+      // loader.style.display = 'none';
+      loader.classList.add('hidden');
+      // Pokaż select
+      select.style.display = 'block';
 
-fetchBreeds().then(catsList => {
-  catsList.forEach(e => {
-    const option = document.createElement('option');
-    option.setAttribute('value', `${e.id}`);
-    option.textContent = `${e.name}`;
-    options.push(option);
-  });
-  select.append(...options);
+      catsList.forEach(e => {
+        const option = document.createElement('option');
+        option.setAttribute('value', `${e.id}`);
+        option.textContent = `${e.name}`;
+        options.push(option);
+      });
+      select.append(...options);
+    })
+    .catch(err => {
+      // Obsługa błędów
+      loader.classList.add('hidden'); // Ukryj loader
+      error.classList.remove('hidden'); // Wyświetl komunikat o błędzie
+      console.error('Wystąpił błąd:', err); // Opcjonalnie: wypisz błąd do konsoli
+    });
 });
 
-// window.addEventListener('load', () => {
-//   loader.classList.remove('hidden'); // Pokaż loader
-//   select.classList.add('hidden'); // Ukryj select
-//   error.classList.add('hidden'); // Ukryj komunikat o błędzie
-
-//   fetchBreeds()
-//     .then(catsList => {
-//       loader.classList.add('hidden'); // Ukryj loader
-//       select.classList.remove('hidden'); // Pokaż select
-//       // ... reszta kodu
-//     })
-//     .catch(() => {
-//       loader.classList.add('hidden'); // Ukryj loader
-//       error.classList.remove('hidden'); // Pokaż komunikat o błędzie
-//     });
-// });
-
 select.addEventListener('change', e => {
+  // Pokaż animację ładowania
+  loader.classList.remove('hidden');
+  // Ukryj informacje o kocie
+  catInfo.style.display = 'none';
+
   const currentValue = e.currentTarget.value;
   catInfo.replaceChildren();
+
   fetchCatByBreed(currentValue)
     .then(catUrl => {
+      // Ukryj animację ładowania
+      //loader.style.display = 'none';
+      loader.classList.add('hidden');
+      // Pokaż informacje o kocie
+      catInfo.style.display = 'block';
+
       const catImage = document.createElement('img');
       catInfo.append(catImage);
       catImage.setAttribute('src', `${catUrl}`);
@@ -48,16 +64,19 @@ select.addEventListener('change', e => {
     })
     .then(
       fetch(
-        'https://api.thecatapi.com/v1/breeds?api_key=live_y4UBJpWFDyRXMCTGfGBilRBknPor8oQfujHTprh9Wc5GLEprvfb2C3TWjhs6htue'
+        'https://api.thecatapi.com/v1/breeds?api_key=live_e5uNK38D2LdYvYq9jrw7OoTkULXjhFXHcTTTLfhQCmB8zyjET14WEzbSaUbxwzC4'
       )
         .then(response => response.json())
         .then(data => {
           data.forEach(cat => {
             if (currentValue === cat.id) {
+              const textContainer = document.createElement('div');
+              textContainer.classList.add('text-container');
               const catName = document.createElement('h1');
               const catDescr = document.createElement('p');
               const catTemp = document.createElement('span');
-              catInfo.append(catName, catDescr, catTemp);
+              textContainer.append(catName, catDescr, catTemp);
+              catInfo.append(textContainer);
               catName.textContent = `${cat.name}`;
               catDescr.textContent = `${cat.description}`;
               catTemp.textContent = `Temperament: ${cat.temperament}`;
@@ -66,46 +85,3 @@ select.addEventListener('change', e => {
         })
     );
 });
-// select.addEventListener('change', e => {
-//   loader.classList.remove('hidden'); // Pokaż loader
-//   catInfo.classList.add('hidden'); // Ukryj catInfo
-//   error.classList.add('hidden'); // Ukryj komunikat o błędzie
-
-//   const currentValue = e.currentTarget.value;
-//   catInfo.replaceChildren();
-
-//   fetchCatByBreed(currentValue)
-//     .then(catUrl => {
-//       loader.classList.add('hidden'); // Ukryj loader
-//       catInfo.classList.remove('hidden'); // Pokaż catInfo
-
-//       const catImage = document.createElement('img');
-//       catInfo.append(catImage);
-//       catImage.setAttribute('src', `${catUrl}`);
-//       catImage.setAttribute('width', '500');
-//       catImage.setAttribute('height', '500');
-
-//       // Kolejne zapytanie o dane kota
-//       return fetch(
-//         'https://api.thecatapi.com/v1/breeds?api_key=live_y4UBJpWFDyRXMCTGfGBilRBknPor8oQfujHTprh9Wc5GLEprvfb2C3TWjhs6htue'
-//       );
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//       data.forEach(cat => {
-//         if (currentValue === cat.id) {
-//           const catName = document.createElement('h1');
-//           const catDescr = document.createElement('p');
-//           const catTemp = document.createElement('span');
-//           catInfo.append(catName, catDescr, catTemp);
-//           catName.textContent = `${cat.name}`;
-//           catDescr.textContent = `${cat.description}`;
-//           catTemp.textContent = `Temperament: ${cat.temperament}`;
-//         }
-//       });
-//     })
-//     .catch(() => {
-//       loader.classList.add('hidden'); // Ukryj loader
-//       error.classList.remove('hidden'); // Pokaż komunikat o błędzie
-//     });
-// });
