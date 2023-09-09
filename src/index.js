@@ -54,7 +54,7 @@ select.addEventListener('change', e => {
       //loader.style.display = 'none';
       loader.classList.add('hidden');
       // Pokaż informacje o kocie
-      catInfo.style.display = 'block';
+      catInfo.style.display = 'flex'; //tutaj zmiana wyswietlania
 
       const catImage = document.createElement('img');
       catInfo.append(catImage);

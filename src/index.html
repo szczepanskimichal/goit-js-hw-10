@@ -6,6 +6,18 @@
     <title>Homework 10</title>
     <style>
       /* Dodane style */
+      .cat-info {
+        margin-top: 20px;
+        padding: 20px;
+
+        margin-left: auto;
+        margin-right: auto;
+
+        display: flex; /* Dodałem display flex */
+        justify-content: space-between; /* Rozdzieli obraz i tekst */
+        align-items: start; /* Wyśrodkuje elementy w pionie */
+      }
+
       .loader.hidden {
         display: none; /* Ukryj animację ładowania*/
       }
@@ -13,11 +25,6 @@
       .breed-select.hidden {
         display: none; /* Ukryj select */
       }
-
-      .cat-info.hidden {
-        display: none; /* Ukryj informacje o kocie */
-      }
-
       .loader {
         display: block;
         position: relative;
@@ -57,40 +64,11 @@
       .error.hidden {
         display: none; /* Ukrywa komunikat o błędzie */
       }
-
-      .cat-info {
-        /* margin-top: 20px;
-        padding: 20px;
-        width: 1024px; */
-        /* background-color: #373838;
-        border: 1px solid #8c9508; */
-        margin-left: auto;
-        margin-right: auto;
-        /* border-radius: 4px;
-        box-shadow: 3px 3px 11px; */
-        display: flex; /* Dodałem display flex */
-        justify-content: space-between; /* Rozdzieli obraz i tekst */
-        align-items: start; /* Wyśrodkuje elementy w pionie */
-      }
-
-      .cat-info img {
-        max-width: 45%; /* Możesz dostosować do własnych potrzeb */
-        margin-right: 5%; /* Odstęp między obrazkiem a opisem */
-        /* width: 500px;
-        height: 500px;
-        flex-shrink: 0; /* Zapobiega zmniejszeniu obrazka */
-        /*margin-right: 20px; Dodajemy odstęp między obrazkiem a tekstem */
-      }
-
-      /* Dodałem kontener dla tekstu */
-      .cat-info .text-container {
-        flex: 1;
-        /* max-width: 500px; */
-      }
     </style>
   </head>
   <body>
     <select class="breed-select"></select>
+
     <p class="loader"></p>
     <p class="error">Oops! Something went wrong! Try reloading the page!</p>
     <div class="cat-info"></div>
